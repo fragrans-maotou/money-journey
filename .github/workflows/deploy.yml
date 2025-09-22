@@ -1,0 +1,29 @@
+name: Vue Deploy
+
+on:
+  push:
+    branches: [ master ]   # 监听主分支
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 1. 检出代码
+        uses: actions/checkout@v4
+
+      - name: 2. 安装 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: 3. 安装依赖 & 构建
+        run: |
+          npm ci
+          npm run build
+
+      - name: 4. 部署到 GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}   # 官方自带，无需手动 PAT
+          publish_dir: ./dist                         # 构建输出目录
