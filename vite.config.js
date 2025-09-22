@@ -71,11 +71,22 @@ export default defineConfig(({ mode }) => {
   
   return {
     plugins,
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+    resolve: {
+      alias: {
+        '@': fileURLToPath(new URL('./src', import.meta.url))
+      },
     },
-  },
+    esbuild: {
+      // 跳过 TypeScript 类型检查，只进行语法转换
+      target: 'es2020',
+      tsconfigRaw: {
+        compilerOptions: {
+          skipLibCheck: true,
+          noEmit: true,
+          isolatedModules: true
+        }
+      }
+    },
   build: {
     // 生产构建优化
     target: 'es2015',
