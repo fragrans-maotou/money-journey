@@ -3,12 +3,14 @@ name: Vue Deploy
 on:
   push:
     branches: [ master ]   # 监听主分支
+permissions:          # ← 全局一次性给足
+  contents: write
+  pages: write
+  id-token: write
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    permissions:           # 新增这一整块
-      contents: write      # 给写权限
     steps:
       - name: 1. 检出代码
         uses: actions/checkout@v4
