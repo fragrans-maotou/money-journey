@@ -7,6 +7,8 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    permissions:           # 新增这一整块
+      contents: write      # 给写权限
     steps:
       - name: 1. 检出代码
         uses: actions/checkout@v4
