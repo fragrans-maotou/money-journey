@@ -344,7 +344,7 @@ defineEmits<{
 // Reactive State
 // ============================================================================
 
-const currentChartType = ref<'pie' | 'line' | 'bar'>(props.chartType)
+const currentChartType = ref<'pie' | 'line' | 'bar' | 'heatmap'>(props.chartType)
 const hoveredSegment = ref<number | null>(null)
 const hoveredPoint = ref<number | null>(null)
 const hoveredBar = ref<number | null>(null)
@@ -609,7 +609,7 @@ const maxDailyAmount = computed(() => {
 // ============================================================================
 
 const setChartType = (type: string) => {
-  currentChartType.value = type as 'pie' | 'line' | 'bar'
+  currentChartType.value = type as 'pie' | 'line' | 'bar' | 'heatmap'
 }
 
 const getCategoryColor = (categoryId: string): string => {

@@ -9,7 +9,9 @@ import type {
   BudgetAnalysis,
   TrendAnalysis,
   CustomPeriodAnalysis,
-  CategoryComparison
+  CategoryComparison,
+  BudgetComparison,
+  AnalysisInsight
 } from '@/types'
 import { useExpense } from './useExpense'
 import { useBudget } from './useBudget'
