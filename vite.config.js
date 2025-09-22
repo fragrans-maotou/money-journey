@@ -10,6 +10,10 @@ import { VitePWA } from 'vite-plugin-pwa'
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   
+  // GitHub Pages 部署配置
+  const isGitHubPages = env.VITE_DEPLOY_TARGET === 'github-pages' || mode === 'github-pages'
+  const base = isGitHubPages ? '/money-journey/' : '/'
+  
   const plugins = [
     vue(),
     vueDevTools(),
@@ -32,8 +36,8 @@ export default defineConfig(({ mode }) => {
           background_color: '#ffffff',
           display: 'standalone',
           orientation: 'portrait',
-          scope: '/',
-          start_url: '/',
+          scope: base,
+          start_url: base,
           icons: [
             {
               src: 'pwa-192x192.png',
@@ -70,6 +74,7 @@ export default defineConfig(({ mode }) => {
   }
   
   return {
+    base,
     plugins,
     resolve: {
       alias: {

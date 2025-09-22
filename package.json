@@ -14,6 +14,8 @@
     "build:with-check": "vue-tsc && vite build",
     "build:analyze-with-check": "vue-tsc && vite build --mode analyze",
     "build:prod-with-check": "vue-tsc && vite build --mode production",
+    "build:github": "vite build --mode github-pages",
+    "build:github-with-check": "vue-tsc && vite build --mode github-pages",
     "preview": "vite preview",
     "preview:build": "npm run build && vite preview",
     "test:unit": "vitest --run",
