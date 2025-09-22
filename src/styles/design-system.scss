@@ -1,0 +1,164 @@
+// iOS 设计系统
+:root {
+  // 颜色系统 - iOS 标准色彩
+  --ios-blue: #007AFF;
+  --ios-green: #34C759;
+  --ios-red: #FF3B30;
+  --ios-orange: #FF9500;
+  --ios-yellow: #FFCC00;
+  --ios-purple: #AF52DE;
+  --ios-pink: #FF2D92;
+  --ios-teal: #5AC8FA;
+  
+  // 灰度系统
+  --ios-gray: #8E8E93;
+  --ios-gray-2: #AEAEB2;
+  --ios-gray-3: #C7C7CC;
+  --ios-gray-4: #D1D1D6;
+  --ios-gray-5: #E5E5EA;
+  --ios-gray-6: #F2F2F7;
+  
+  // 深色模式支持
+  --ios-label: #000000;
+  --ios-secondary-label: #3C3C43;
+  --ios-tertiary-label: #3C3C4399;
+  --ios-quaternary-label: #3C3C432E;
+  
+  // 背景色
+  --ios-system-background: #FFFFFF;
+  --ios-secondary-system-background: #F2F2F7;
+  --ios-tertiary-system-background: #FFFFFF;
+  --ios-grouped-background: #F2F2F7;
+  --ios-secondary-grouped-background: #FFFFFF;
+  --ios-tertiary-grouped-background: #F2F2F7;
+  
+  // 分隔线
+  --ios-separator: #3C3C4349;
+  --ios-opaque-separator: #C6C6C8;
+  
+  // 圆角系统
+  --ios-radius-small: 6px;
+  --ios-radius-medium: 10px;
+  --ios-radius-large: 14px;
+  --ios-radius-xl: 20px;
+  
+  // 阴影系统
+  --ios-shadow-small: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --ios-shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.15);
+  --ios-shadow-large: 0 8px 25px rgba(0, 0, 0, 0.15);
+  
+  // 字体系统
+  --ios-font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --ios-font-weight-regular: 400;
+  --ios-font-weight-medium: 500;
+  --ios-font-weight-semibold: 600;
+  --ios-font-weight-bold: 700;
+  
+  // 字体大小
+  --ios-font-size-caption2: 11px;
+  --ios-font-size-caption1: 12px;
+  --ios-font-size-footnote: 13px;
+  --ios-font-size-subheadline: 15px;
+  --ios-font-size-callout: 16px;
+  --ios-font-size-body: 17px;
+  --ios-font-size-headline: 17px;
+  --ios-font-size-title3: 20px;
+  --ios-font-size-title2: 22px;
+  --ios-font-size-title1: 28px;
+  --ios-font-size-large-title: 34px;
+  
+  // 间距系统
+  --ios-spacing-xs: 4px;
+  --ios-spacing-sm: 8px;
+  --ios-spacing-md: 12px;
+  --ios-spacing-lg: 16px;
+  --ios-spacing-xl: 20px;
+  --ios-spacing-2xl: 24px;
+  --ios-spacing-3xl: 32px;
+  
+  // 动画时长
+  --ios-duration-fast: 0.15s;
+  --ios-duration-normal: 0.25s;
+  --ios-duration-slow: 0.35s;
+  
+  // 动画缓动
+  --ios-ease-out: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ios-ease-in-out: cubic-bezier(0.42, 0, 0.58, 1);
+  --ios-ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+// 深色模式
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ios-label: #FFFFFF;
+    --ios-secondary-label: #EBEBF599;
+    --ios-tertiary-label: #EBEBF54D;
+    --ios-quaternary-label: #EBEBF52E;
+    
+    --ios-system-background: #000000;
+    --ios-secondary-system-background: #1C1C1E;
+    --ios-tertiary-system-background: #2C2C2E;
+    --ios-grouped-background: #000000;
+    --ios-secondary-grouped-background: #1C1C1E;
+    --ios-tertiary-grouped-background: #2C2C2E;
+    
+    --ios-separator: #54545899;
+    --ios-opaque-separator: #38383A;
+  }
+}
+
+// 基础重置样式
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--ios-font-family);
+  font-size: var(--ios-font-size-body);
+  line-height: 1.4;
+  color: var(--ios-label);
+  background-color: var(--ios-system-background);
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// 高斯模糊效果
+.ios-blur {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.8);
+}
+
+@media (prefers-color-scheme: dark) {
+  .ios-blur {
+    background: rgba(28, 28, 30, 0.8);
+  }
+}
+
+// 触摸反馈基础类
+.ios-touchable {
+  transition: all var(--ios-duration-fast) var(--ios-ease-out);
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  
+  &:active {
+    transform: scale(0.95);
+    opacity: 0.8;
+  }
+}
+
+// 弹性动画
+.ios-spring {
+  transition: all var(--ios-duration-normal) var(--ios-ease-spring);
+}
+
+// 安全区域适配
+.ios-safe-area {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}

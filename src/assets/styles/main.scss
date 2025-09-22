@@ -1,0 +1,58 @@
+// iOS Design System Variables
+:root {
+  // Colors
+  --ios-blue: #007AFF;
+  --ios-green: #34C759;
+  --ios-red: #FF3B30;
+  --ios-orange: #FF9500;
+  --ios-gray: #8E8E93;
+  --ios-gray-light: #F2F2F7;
+  --ios-gray-dark: #1C1C1E;
+  
+  // Border Radius
+  --ios-radius-small: 8px;
+  --ios-radius-medium: 12px;
+  --ios-radius-large: 16px;
+  
+  // Shadows
+  --ios-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --ios-shadow-large: 0 4px 16px rgba(0, 0, 0, 0.1);
+  
+  // Typography
+  --ios-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+// Reset and base styles
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--ios-font-family);
+  line-height: 1.6;
+  color: var(--ios-gray-dark);
+  background-color: var(--ios-gray-light);
+}
+
+// iOS-style blur effect
+.ios-blur {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.8);
+}
+
+// iOS-style button
+.ios-button {
+  border-radius: var(--ios-radius-medium);
+  border: none;
+  font-family: var(--ios-font-family);
+  font-weight: 600;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  
+  &:active {
+    transform: scale(0.95);
+  }
+}

@@ -1,0 +1,158 @@
+import { fileURLToPath, URL } from 'node:url'
+
+import { defineConfig, loadEnv } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import vueDevTools from 'vite-plugin-vue-devtools'
+import { visualizer } from 'rollup-plugin-visualizer'
+import { VitePWA } from 'vite-plugin-pwa'
+
+// https://vite.dev/config/
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), '')
+  
+  const plugins = [
+    vue(),
+    vueDevTools(),
+  ]
+  
+  // 添加PWA支持
+  if (env.VITE_ENABLE_PWA === 'true' || mode === 'production') {
+    plugins.push(
+      VitePWA({
+        registerType: 'autoUpdate',
+        workbox: {
+          globPatterns: ['**/*.{js,css,html,ico,png,svg}']
+        },
+        includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
+        manifest: {
+          name: '月度预算跟踪器',
+          short_name: '预算跟踪',
+          description: '帮助您管理每月消费预算的智能应用',
+          theme_color: '#2D5A27',
+          background_color: '#ffffff',
+          display: 'standalone',
+          orientation: 'portrait',
+          scope: '/',
+          start_url: '/',
+          icons: [
+            {
+              src: 'pwa-192x192.png',
+              sizes: '192x192',
+              type: 'image/png'
+            },
+            {
+              src: 'pwa-512x512.png',
+              sizes: '512x512',
+              type: 'image/png'
+            },
+            {
+              src: 'pwa-512x512.png',
+              sizes: '512x512',
+              type: 'image/png',
+              purpose: 'any maskable'
+            }
+          ]
+        }
+      })
+    )
+  }
+  
+  // 添加构建分析插件
+  if (env.VITE_ANALYZE_BUNDLE === 'true') {
+    plugins.push(
+      visualizer({
+        filename: 'dist/stats.html',
+        open: true,
+        gzipSize: true,
+        brotliSize: true,
+      })
+    )
+  }
+  
+  return {
+    plugins,
+  resolve: {
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url))
+    },
+  },
+  build: {
+    // 生产构建优化
+    target: 'es2015',
+    minify: 'terser',
+    cssMinify: true,
+    
+    // 代码分割配置
+    rollupOptions: {
+      output: {
+        // 手动分割代码块
+        manualChunks: {
+          // Vue核心库单独打包
+          'vue-vendor': ['vue', 'vue-router', 'pinia']
+        },
+        // 资源文件命名
+        chunkFileNames: 'js/[name]-[hash].js',
+        entryFileNames: 'js/[name]-[hash].js',
+        assetFileNames: (assetInfo) => {
+          const info = assetInfo.name.split('.')
+          const ext = info[info.length - 1]
+          if (/\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/i.test(assetInfo.name)) {
+            return `media/[name]-[hash].${ext}`
+          }
+          if (/\.(png|jpe?g|gif|svg)(\?.*)?$/i.test(assetInfo.name)) {
+            return `img/[name]-[hash].${ext}`
+          }
+          if (/\.(woff2?|eot|ttf|otf)(\?.*)?$/i.test(assetInfo.name)) {
+            return `fonts/[name]-[hash].${ext}`
+          }
+          return `assets/[name]-[hash].${ext}`
+        }
+      }
+    },
+    
+    // 压缩配置
+    terserOptions: {
+      compress: {
+        drop_console: true, // 移除console.log
+        drop_debugger: true, // 移除debugger
+        pure_funcs: ['console.log', 'console.info'] // 移除指定函数调用
+      }
+    },
+    
+    // 资源内联阈值
+    assetsInlineLimit: 4096, // 小于4kb的资源内联为base64
+    
+    // 启用CSS代码分割
+    cssCodeSplit: true,
+    
+    // 生成source map用于调试（生产环境可关闭）
+    sourcemap: false,
+    
+    // 报告压缩详情
+    reportCompressedSize: true,
+    
+    // 警告阈值
+    chunkSizeWarningLimit: 1000
+  },
+  
+  // 开发服务器配置
+  server: {
+    // 启用gzip压缩
+    compress: true,
+    // 预加载模块
+    preTransformRequests: true
+  },
+  
+  // 预览服务器配置
+  preview: {
+    // 启用gzip压缩
+    compress: true
+  },
+  
+  // 优化依赖预构建
+  optimizeDeps: {
+    include: ['vue', 'vue-router', 'pinia'],
+    exclude: ['@vueuse/core'] // 排除不需要预构建的包
+  }
+  }
+})
