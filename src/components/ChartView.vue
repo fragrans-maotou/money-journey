@@ -709,7 +709,7 @@ onUnmounted(() => {
 .chart-view {
   background: white;
   border-radius: 16px;
-  padding: 20px;
+  padding: 10px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
 }
 
@@ -737,7 +737,7 @@ onUnmounted(() => {
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
-
+  flex-direction: column;
   &.active {
     background: white;
     color: #007AFF;
