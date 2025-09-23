@@ -25,7 +25,7 @@ jobs:
       - name: 3. 安装依赖 & 构建
         run: |
           npm ci
-          npm run build
+          npm run build:github
 
       - name: 4. 部署到 GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
