@@ -11,9 +11,8 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
 
   // GitHub Pages 部署配置
-  // const isGitHubPages = env.VITE_DEPLOY_TARGET === 'github-pages' || mode === 'github-pages'
-  // const base = isGitHubPages ? '/money-journey/' : '/'
-   const base = '/money-journey/'
+  const isGitHubPages = env.VITE_DEPLOY_TARGET === 'github-pages' || mode === 'github-pages'
+  const base = isGitHubPages ? '/money-journey/' : '/'
 
   const plugins = [
     vue(),
