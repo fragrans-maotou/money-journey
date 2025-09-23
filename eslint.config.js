@@ -20,7 +20,8 @@ export default [
     files: ['**/*.vue'],
     languageOptions: {
       parserOptions: {
-        parser: '@babel/eslint-parser'
+        ecmaVersion: 'latest',
+        sourceType: 'module'
       }
     },
     rules: {

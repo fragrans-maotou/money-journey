@@ -14,18 +14,55 @@
     </SafeArea>
     
     <TabBar v-if="showTabBar" />
+    
+    <!-- Global Components -->
+    <Toast />
+    <LoadingSpinner 
+      :visible="isLoading"
+      :global="true"
+      :message="loadingMessage"
+      :progress="loadingProgress"
+      :show-progress="loadingProgress !== undefined"
+      :cancelable="canCancel"
+      @cancel="cancelAllLoading"
+    />
+    <PerformanceMonitor />
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, ref, watch, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useGesture } from './composables/useGesture'
+import { useDeviceAdaptation } from './composables/useDeviceAdaptation'
+import { usePerformanceOptimization } from './composables/usePerformanceOptimization'
+import { useTouchOptimization } from './composables/useTouchOptimization'
+import { getGlobalLoadingState } from './composables/useLoadingState'
+import { getGlobalDataRecovery } from './composables/useDataRecovery'
 import SafeArea from './components/layout/SafeArea.vue'
 import TabBar from './components/layout/TabBar.vue'
+import Toast from './components/Toast.vue'
+import LoadingSpinner from './components/LoadingSpinner.vue'
+import PerformanceMonitor from './components/PerformanceMonitor.vue'
 
 const route = useRoute()
 const router = useRouter()
+
+// Initialize global services
+const { 
+  isLoading, 
+  loadingMessage, 
+  loadingProgress, 
+  canCancel, 
+  cancelAllLoading 
+} = getGlobalLoadingState()
+
+const { createAutoBackup, getCurrentData } = getGlobalDataRecovery()
+
+// Initialize mobile optimizations
+const { deviceInfo, isSmallScreen, isLandscape } = useDeviceAdaptation()
+const { startPerformanceMonitoring, performanceMetrics } = usePerformanceOptimization()
+const { validateTouchTargets } = useTouchOptimization()
 
 // Initialize gesture handling
 const { onSwipe } = useGesture({
@@ -88,11 +125,66 @@ const onTransitionEnter = (el: Element) => {
 const onTransitionLeave = (el: Element) => {
   // Add any leave transition logic here
 }
+
+// ============================================================================
+// Lifecycle and Auto-backup
+// ============================================================================
+
+onMounted(async () => {
+  // Start performance monitoring
+  const stopMonitoring = startPerformanceMonitoring()
+  
+  // Create auto backup on app start
+  try {
+    const currentData = getCurrentData()
+    if (currentData.budgets.length > 0 || currentData.expenses.length > 0) {
+      await createAutoBackup(currentData)
+    }
+  } catch (error) {
+    console.warn('Failed to create auto backup on startup:', error)
+  }
+  
+  // Validate touch targets in development
+  if (process.env.NODE_ENV === 'development') {
+    setTimeout(() => {
+      const issues = validateTouchTargets()
+      if (issues.length > 0) {
+        console.warn('Touch target accessibility issues:', issues)
+      }
+    }, 1000)
+  }
+  
+  // Cleanup on unmount
+  return () => {
+    stopMonitoring()
+  }
+})
+
+// Create auto backup when data changes (debounced)
+let autoBackupTimeout: NodeJS.Timeout | null = null
+const scheduleAutoBackup = () => {
+  if (autoBackupTimeout) {
+    clearTimeout(autoBackupTimeout)
+  }
+  
+  autoBackupTimeout = setTimeout(async () => {
+    try {
+      const currentData = getCurrentData()
+      await createAutoBackup(currentData)
+    } catch (error) {
+      console.warn('Auto backup failed:', error)
+    }
+  }, 5000) // 5 second delay
+}
+
+// Watch for route changes to trigger auto backup
+watch(route, () => {
+  scheduleAutoBackup()
+})
 </script>
 
 <style lang="scss">
-// Import design system
-@import './styles/design-system.scss';
+// Design system is automatically imported via Vite config
 
 #app {
   font-family: var(--ios-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);

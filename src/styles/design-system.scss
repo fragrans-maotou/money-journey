@@ -162,3 +162,118 @@ body {
   padding-left: env(safe-area-inset-left);
   padding-right: env(safe-area-inset-right);
 }
+
+// 响应式断点
+$breakpoints: (
+  xs: 0,
+  sm: 375px,
+  md: 414px,
+  lg: 768px,
+  xl: 1024px
+);
+
+// 响应式混合器
+@mixin respond-to($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    $value: map-get($breakpoints, $breakpoint);
+    @if $value == 0 {
+      @content;
+    } @else {
+      @media screen and (min-width: $value) {
+        @content;
+      }
+    }
+  }
+}
+
+// 触摸优化
+.ios-touch-target {
+  min-width: 44px;
+  min-height: 44px;
+  padding: var(--ios-spacing-sm, 8px);
+  margin: var(--ios-spacing-xs, 4px);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  
+  // 小屏幕适配
+  @media screen and (max-width: 374px) {
+    min-width: 40px;
+    min-height: 40px;
+    padding: var(--ios-spacing-xs, 4px);
+  }
+}
+
+// 性能优化类
+.ios-optimized {
+  will-change: transform;
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+// 滚动优化
+.ios-scroll-optimized {
+  -webkit-overflow-scrolling: touch;
+  overflow-scrolling: touch;
+  will-change: scroll-position;
+  
+  // 隐藏滚动条
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+// 响应式字体大小
+.ios-responsive-text {
+  font-size: var(--ios-font-size-body, 17px);
+  
+  @media screen and (max-width: 320px) {
+    font-size: var(--ios-font-size-subheadline, 15px);
+  }
+  
+  @media screen and (min-width: 414px) {
+    font-size: var(--ios-font-size-headline, 17px);
+  }
+}
+
+// 响应式间距工具类
+.ios-spacing-responsive {
+  padding: var(--ios-spacing-md, 12px);
+  
+  @media screen and (max-width: 374px) {
+    padding: var(--ios-spacing-sm, 8px);
+  }
+  
+  @media screen and (min-width: 414px) {
+    padding: var(--ios-spacing-lg, 16px);
+  }
+  
+  @media screen and (orientation: landscape) and (max-height: 500px) {
+    padding-top: var(--ios-spacing-sm, 8px);
+    padding-bottom: var(--ios-spacing-sm, 8px);
+  }
+}
+
+// 高DPI显示优化
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .ios-high-dpi-optimized {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+// 减少动画偏好支持
+@media (prefers-reduced-motion: reduce) {
+  .ios-spring,
+  .ios-touchable,
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

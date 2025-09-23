@@ -262,3 +262,4 @@ export const DEFAULT_CATEGORIES: Omit<Category, 'id'>[] = [
 
 export * from './validation'
 export * from './utils'
+export * from './errors'
