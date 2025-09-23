@@ -9,16 +9,17 @@ import { VitePWA } from 'vite-plugin-pwa'
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
-  
+
   // GitHub Pages 部署配置
-  const isGitHubPages = env.VITE_DEPLOY_TARGET === 'github-pages' || mode === 'github-pages'
-  const base = isGitHubPages ? '/money-journey/' : '/'
-  
+  // const isGitHubPages = env.VITE_DEPLOY_TARGET === 'github-pages' || mode === 'github-pages'
+  // const base = isGitHubPages ? '/money-journey/' : '/'
+   const base = '/money-journey/'
+
   const plugins = [
     vue(),
     vueDevTools(),
   ]
-  
+
   // 添加PWA支持
   if (env.VITE_ENABLE_PWA === 'true' || mode === 'production') {
     plugins.push(
@@ -60,7 +61,7 @@ export default defineConfig(({ mode }) => {
       })
     )
   }
-  
+
   // 添加构建分析插件
   if (env.VITE_ANALYZE_BUNDLE === 'true') {
     plugins.push(
@@ -72,7 +73,7 @@ export default defineConfig(({ mode }) => {
       })
     )
   }
-  
+
   return {
     base,
     plugins,
@@ -97,7 +98,7 @@ export default defineConfig(({ mode }) => {
     target: 'es2015',
     minify: 'terser',
     cssMinify: true,
-    
+
     // 代码分割配置
     rollupOptions: {
       output: {
@@ -125,7 +126,7 @@ export default defineConfig(({ mode }) => {
         }
       }
     },
-    
+
     // 压缩配置
     terserOptions: {
       compress: {
@@ -134,23 +135,23 @@ export default defineConfig(({ mode }) => {
         pure_funcs: ['console.log', 'console.info'] // 移除指定函数调用
       }
     },
-    
+
     // 资源内联阈值
     assetsInlineLimit: 4096, // 小于4kb的资源内联为base64
-    
+
     // 启用CSS代码分割
     cssCodeSplit: true,
-    
+
     // 生成source map用于调试（生产环境可关闭）
     sourcemap: false,
-    
+
     // 报告压缩详情
     reportCompressedSize: true,
-    
+
     // 警告阈值
     chunkSizeWarningLimit: 1000
   },
-  
+
   // 开发服务器配置
   server: {
     // 启用gzip压缩
@@ -158,13 +159,13 @@ export default defineConfig(({ mode }) => {
     // 预加载模块
     preTransformRequests: true
   },
-  
+
   // 预览服务器配置
   preview: {
     // 启用gzip压缩
     compress: true
   },
-  
+
   // 优化依赖预构建
   optimizeDeps: {
     include: ['vue', 'vue-router', 'pinia'],
