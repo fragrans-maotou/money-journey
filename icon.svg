@@ -1,0 +1,19 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景圆形 -->
+  <circle cx="256" cy="256" r="256" fill="#2D5A27"/>
+  
+  <!-- 钱币图标 -->
+  <circle cx="256" cy="200" r="80" fill="none" stroke="#ffffff" stroke-width="8"/>
+  <text x="256" y="215" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="48" font-weight="bold">€</text>
+  
+  <!-- 图表线条 -->
+  <path d="M120 320 L200 300 L280 340 L360 310 L392 330" stroke="#ffffff" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- 数据点 -->
+  <circle cx="200" cy="300" r="6" fill="#ffffff"/>
+  <circle cx="280" cy="340" r="6" fill="#ffffff"/>
+  <circle cx="360" cy="310" r="6" fill="#ffffff"/>
+  
+  <!-- 底部文字 -->
+  <text x="256" y="420" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="32" font-weight="600">预算</text>
+</svg>
